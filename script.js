@@ -182,48 +182,6 @@ styleSheet.textContent = `
 `;
 document.head.appendChild(styleSheet);
 
-/* ---- Testimonials Slider ---- */
-const track = document.getElementById('testimonialsTrack');
-const dots = document.querySelectorAll('.testi-dot');
-const prevBtn = document.getElementById('testiPrev');
-const nextBtn = document.getElementById('testiNext');
-let currentSlide = 0;
-const totalSlides = track ? track.children.length : 0;
-
-function goToSlide(index) {
-  if (!track) return;
-  currentSlide = (index + totalSlides) % totalSlides;
-  track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentSlide);
-  });
-}
-
-if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
-dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
-
-// Auto-advance
-let autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
-if (track) {
-  track.addEventListener('mouseenter', () => clearInterval(autoSlide));
-  track.addEventListener('mouseleave', () => {
-    autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
-  });
-}
-
-// Touch swipe
-let touchStartX = 0;
-let touchEndX = 0;
-if (track) {
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 40) goToSlide(diff > 0 ? currentSlide + 1 : currentSlide - 1);
-  }, { passive: true });
-}
-
 /* ---- Contact Form ---- */
 const contactForm = document.getElementById('contactForm');
 const formSuccess = document.getElementById('formSuccess');
