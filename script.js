@@ -4,6 +4,10 @@
 
 'use strict';
 
+const EMAILJS_PUBLIC_KEY  = 'wwVhS6Vx5dGlQZgWf';
+const EMAILJS_SERVICE_ID  = 'service_no1u1xd';
+const EMAILJS_TEMPLATE_ID = 'template_240dpwc';
+
 /* ---- Init AOS ---- */
 AOS.init({
   duration: 700,
@@ -224,9 +228,13 @@ if (track) {
   }, { passive: true });
 }
 
+
 /* ---- Contact Form ---- */
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
 const contactForm = document.getElementById('contactForm');
 const formSuccess = document.getElementById('formSuccess');
+const formError   = document.getElementById('formError');
 
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
@@ -235,13 +243,20 @@ if (contactForm) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
 
-    setTimeout(() => {
-      formSuccess.classList.add('show');
-      contactForm.reset();
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-      btn.disabled = false;
-      setTimeout(() => formSuccess.classList.remove('show'), 4000);
-    }, 1400);
+    emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
+      .then(() => {
+        formSuccess.classList.add('show');
+        contactForm.reset();
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        btn.disabled = false;
+        setTimeout(() => formSuccess.classList.remove('show'), 5000);
+      })
+      .catch(() => {
+        if (formError) formError.classList.add('show');
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        btn.disabled = false;
+        setTimeout(() => { if (formError) formError.classList.remove('show'); }, 7000);
+      });
   });
 }
 
