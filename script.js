@@ -230,35 +230,53 @@ if (track) {
 
 
 /* ---- Contact Form ---- */
-emailjs.init(EMAILJS_PUBLIC_KEY);
+(function() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
 
-const contactForm = document.getElementById('contactForm');
-const formSuccess = document.getElementById('formSuccess');
-const formError   = document.getElementById('formError');
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+  const formError   = document.getElementById('formError');
 
-if (contactForm) {
+  if (!contactForm) return;
+
   contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = this.querySelector('button[type="submit"]');
+    const originalHTML = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
 
+    if (typeof emailjs === 'undefined') {
+      if (formError) formError.classList.add('show');
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+      return;
+    }
+
     emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
       .then(() => {
-        formSuccess.classList.add('show');
+        if (formSuccess) formSuccess.classList.add('show');
+        if (formError) formError.classList.remove('show');
         contactForm.reset();
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
         btn.disabled = false;
-        setTimeout(() => formSuccess.classList.remove('show'), 5000);
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          if (formSuccess) formSuccess.classList.remove('show');
+        }, 5000);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('EmailJS error:', err);
         if (formError) formError.classList.add('show');
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        if (formSuccess) formSuccess.classList.remove('show');
+        btn.innerHTML = originalHTML;
         btn.disabled = false;
         setTimeout(() => { if (formError) formError.classList.remove('show'); }, 7000);
       });
   });
-}
+})();
 
 /* ---- Particle Canvas ---- */
 (function() {
