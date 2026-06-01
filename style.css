@@ -452,6 +452,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background-clip: text;
   background-color: var(--card);
 }
+.avatar-photo {
+  position: relative;
+  z-index: 1;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 3px solid var(--bg);
+  display: block;
+}
 .profile-name {
   font-family: var(--font-display);
   font-weight: 700;
