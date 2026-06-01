@@ -38,11 +38,11 @@ const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('section[id]');
 
 function updateNav() {
-  // Scroll class
-  if (window.scrollY > 30) {
-    navbar.classList.add('scrolled');
+  // At top = slightly transparent; scrolled = fully opaque glass
+  if (window.scrollY < 30) {
+    navbar.classList.add('at-top');
   } else {
-    navbar.classList.remove('scrolled');
+    navbar.classList.remove('at-top');
   }
 
   // Active link
