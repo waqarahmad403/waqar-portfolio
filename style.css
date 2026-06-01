@@ -1254,7 +1254,7 @@ a.contact-item-value:hover { color: var(--secondary); }
 }
 .footer-brand { display: flex; align-items: center; gap: 16px; }
 .footer-logo {
-  width: 48px; height: 48px;
+  width: 52px; height: 50px;
   border-radius: 12px;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   display: flex; align-items: center; justify-content: center;
